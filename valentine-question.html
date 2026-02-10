@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff6b9d;
+            --secondary: #ffc1d8;
+            --accent: #ff1744;
+            --text: #4a1942;
+            --white: #ffffff;
+            --red: #8B1538;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffeef4 0%, #ffe0eb 50%, #ffd4e5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background hearts */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 25px;
+            opacity: 0.1;
+            animation: float 20s infinite;
+            color: var(--primary);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.15;
+            }
+            90% {
+                opacity: 0.15;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main content container */
+        .container {
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* The main question */
+        .question {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4.5rem;
+            color: var(--text);
+            margin-bottom: 60px;
+            line-height: 1.3;
+            text-shadow: 2px 2px 4px rgba(255, 107, 157, 0.1);
+            animation: gentlePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes gentlePulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        /* The Yes button */
+        .yes-button {
+            display: inline-block;
+            padding: 20px 80px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            font-size: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 10px 40px rgba(255, 23, 68, 0.3);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 50px;
+        }
+
+        .yes-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .yes-button:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 15px 50px rgba(255, 23, 68, 0.5);
+        }
+
+        .yes-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .yes-button:active {
+            transform: scale(1.05) translateY(-2px);
+        }
+
+        /* Personal message section - simple, no container */
+        .personal-message {
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeIn 1.5s ease-out 0.5s both;
+            padding: 0 10px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .personal-message p {
+            color: var(--text);
+            font-size: 1.3rem;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        /* Confetti animation on button click */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            animation: confetti-fall 3s linear forwards;
+            z-index: 1001;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Loading celebration popup */
+        .celebration-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffeef4 0%, #ffe0eb 50%, #ffd4e5 100%);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1500;
+            animation: fadeIn 0.3s ease;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .celebration-popup.active {
+            display: flex;
+        }
+
+        .celebration-content {
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--secondary);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .celebration-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 15px;
+            animation: bounce 0.6s ease-in-out infinite;
+            padding: 0 20px;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .celebration-subtext {
+            color: var(--primary);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        /* Success overlay - Polaroid card style */
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #E8DDD0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(139, 21, 56, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 21, 56, 0.02) 0%, transparent 50%);
+            display: none;
+            z-index: 2000;
+            animation: fadeIn 0.5s ease;
+            padding: 20px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
+
+        .success-overlay.active {
+            display: block;
+        }
+
+        .success-content {
+            text-align: center;
+            max-width: 700px;
+            width: 100%;
+            animation: scaleIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            padding: 40px 10px;
+            margin: 0 auto;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* I love you message */
+        .love-message {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: var(--red);
+            margin-bottom: 30px;
+            line-height: 1.3;
+            text-shadow: 2px 2px 4px rgba(139, 21, 56, 0.1);
+            padding: 0 10px;
+        }
+
+        /* Polaroid frame */
+        .polaroid-frame {
+            background: white;
+            padding: 20px 20px 50px 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+            display: inline-block;
+            margin-bottom: 40px;
+            transform: rotate(-2deg);
+            transition: transform 0.3s ease;
+            max-width: 100%;
+        }
+
+        .polaroid-frame:hover {
+            transform: rotate(0deg);
+        }
+
+        .photo-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            aspect-ratio: 2/5;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+        }
+
+        .photo-date {
+            position: absolute;
+            bottom: 15px;
+            left: 20px;
+            font-family: 'Special Elite', monospace;
+            font-size: 1.8rem;
+            color: var(--red);
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Message below photo */
+        .bottom-message {
+            font-family: 'Special Elite', monospace;
+            font-size: 1.1rem;
+            color: var(--red);
+            line-height: 1.8;
+            max-width: 550px;
+            margin: 0 auto;
+            text-align: left;
+            padding: 0 15px;
+        }
+
+        .message-signature {
+            margin-top: 20px;
+            text-align: right;
+            font-style: italic;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .question {
+                font-size: 3.2rem;
+                margin-bottom: 40px;
+            }
+
+            .yes-button {
+                padding: 18px 60px;
+                font-size: 1.6rem;
+                margin-bottom: 40px;
+            }
+
+            .personal-message p {
+                font-size: 1.1rem;
+            }
+
+            .celebration-text {
+                font-size: 1.8rem;
+            }
+
+            .celebration-subtext {
+                font-size: 1rem;
+            }
+
+            .success-content {
+                padding: 30px 10px;
+            }
+
+            .love-message {
+                font-size: 2.5rem;
+                margin-bottom: 25px;
+            }
+
+            .polaroid-frame {
+                padding: 18px 18px 40px 18px;
+                margin-bottom: 30px;
+            }
+
+            .photo-container {
+                max-width: 280px;
+            }
+
+            .photo-date {
+                font-size: 1.5rem;
+                left: 15px;
+                bottom: 12px;
+            }
+
+            .bottom-message {
+                font-size: 0.95rem;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .question {
+                font-size: 2.5rem;
+                margin-bottom: 30px;
+            }
+
+            .yes-button {
+                padding: 16px 50px;
+                font-size: 1.4rem;
+                margin-bottom: 30px;
+            }
+
+            .personal-message p {
+                font-size: 1rem;
+            }
+
+            .celebration-text {
+                font-size: 1.5rem;
+                padding: 0 15px;
+            }
+
+            .celebration-subtext {
+                font-size: 0.9rem;
+            }
+
+            .success-content {
+                padding: 20px 5px;
+                min-height: auto;
+            }
+
+            .love-message {
+                font-size: 2rem;
+                margin-bottom: 20px;
+                line-height: 1.4;
+            }
+
+            .polaroid-frame {
+                padding: 12px 12px 35px 12px;
+                margin-bottom: 25px;
+            }
+
+            .photo-container {
+                max-width: 240px;
+            }
+
+            .photo-date {
+                font-size: 1.1rem;
+                left: 10px;
+                bottom: 8px;
+            }
+
+            .bottom-message {
+                font-size: 0.85rem;
+                padding: 0 10px;
+                line-height: 1.6;
+            }
+
+            .message-signature {
+                margin-top: 12px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .question {
+                font-size: 2rem;
+            }
+
+            .yes-button {
+                padding: 14px 40px;
+                font-size: 1.2rem;
+            }
+
+            .celebration-text {
+                font-size: 1.3rem;
+            }
+
+            .love-message {
+                font-size: 1.8rem;
+            }
+
+            .photo-container {
+                max-width: 220px;
+            }
+
+            .bottom-message {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Special handling for short screens (landscape mode or short phones) */
+        @media (max-height: 700px) {
+            .success-content {
+                padding: 15px 10px;
+                min-height: auto;
+                justify-content: flex-start;
+            }
+
+            .love-message {
+                font-size: 2rem;
+                margin-bottom: 15px;
+            }
+
+            .polaroid-frame {
+                margin-bottom: 20px;
+                padding: 12px 12px 30px 12px;
+            }
+
+            .photo-container {
+                max-width: 220px;
+            }
+
+            .bottom-message {
+                font-size: 0.85rem;
+                line-height: 1.5;
+            }
+        }
+
+        /* Very short screens */
+        @media (max-height: 600px) {
+            .success-content {
+                padding: 10px 10px;
+            }
+
+            .love-message {
+                font-size: 1.6rem;
+                margin-bottom: 10px;
+            }
+
+            .polaroid-frame {
+                margin-bottom: 15px;
+                padding: 10px 10px 25px 10px;
+            }
+
+            .photo-container {
+                max-width: 180px;
+            }
+
+            .photo-date {
+                font-size: 0.9rem;
+                left: 8px;
+                bottom: 6px;
+            }
+
+            .bottom-message {
+                font-size: 0.8rem;
+                line-height: 1.4;
+            }
+
+            .message-signature {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating hearts background -->
+    <div class="hearts-bg" id="heartsBg"></div>
+
+    <!-- Celebration popup -->
+    <div class="celebration-popup" id="celebrationPopup">
+        <div class="celebration-content">
+            <div class="spinner"></div>
+            <div class="celebration-text">Yeheeeeeeey Lovey said yes!!!</div>
+            <div class="celebration-subtext">Loading your surprise ♥</div>
+        </div>
+    </div>
+
+    <!-- Success overlay (hidden initially) -->
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-content">
+            <h2 class="love-message">I love you just as you are today, and I love you for all tomorrows.</h2>
+            
+            <div class="polaroid-frame">
+                <div class="photo-container">
+                    <!-- Replace with your photo -->
+                    <img src="us.gif" alt="Our Photo">
+                    <!-- Replace with your date -->
+                    <!-- <div class="photo-date">02.14.2026</div> -->
+                </div>
+            </div>
+
+            <div class="bottom-message">
+                <!-- Replace with your personal message (max 3 sentences) -->
+                02.14.2026. Happy Valentine's Day my Love! We may not be able to celebrate it together today, but I promise na we will make up for all the missed dates when I come home to you. Just a few more days na laaang! 
+                <div class="message-signature">- Kenneth</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="container">
+        <h1 class="question">Will you, <br> Jeanelle Annika Cielo, be my Valentine?</h1>
+        
+        <button class="yes-button" id="yesButton">Yes!</button>
+
+        <div class="personal-message">
+            <p>
+                <!-- Replace this with your one-sentence message or simple message -->
+                Wala nang no button kasi duhhh pinili mo na aq sa captcha 🥰🥰🥰
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Create floating hearts
+        function createFloatingHearts() {
+            const heartsBg = document.getElementById('heartsBg');
+            const heartCount = 20;
+
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.textContent = '♥';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                heart.style.animationDelay = Math.random() * 20 + 's';
+                heart.style.animationDuration = (Math.random() * 15 + 15) + 's';
+                heartsBg.appendChild(heart);
+            }
+        }
+
+        // Create confetti explosion
+        function createConfetti() {
+            const colors = ['#8B1538', '#ff6b9d', '#ffc1d8', '#ff1744', '#ff4081'];
+            const confettiCount = 150;
+
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 0.3 + 's';
+                confetti.style.animationDuration = Math.random() * 2 + 2 + 's';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+
+        // Yes button handler
+        document.getElementById('yesButton').addEventListener('click', function() {
+            createConfetti();
+            
+            // Show celebration popup
+            const celebrationPopup = document.getElementById('celebrationPopup');
+            celebrationPopup.classList.add('active');
+            
+            // After 5 seconds, show the success overlay
+            setTimeout(() => {
+                celebrationPopup.classList.remove('active');
+                document.getElementById('successOverlay').classList.add('active');
+            }, 5000);
+        });
+
+        // Initialize
+        createFloatingHearts();
+    </script>
+</body>
+</html>
